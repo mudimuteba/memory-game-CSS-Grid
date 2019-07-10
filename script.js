@@ -2,13 +2,13 @@ var Game = {
 	chars: "@@##$$%%^^&&**((==[[{{;;::<<??".split(''),
 	selectedCards: [],
 	cardIds: [],
-	tilesFlipped: 0,
+	score: 0,
 }
 
 function newGame() {
 	var board = '';
 
-	Game.tilesFlipped = 0;
+	Game.score = 0;
 	alert("Starting new game...");
 	document.getElementById('board').innerHTML = "";
 	shuffleCards();
@@ -16,7 +16,7 @@ function newGame() {
 	for (var i = 0; i < 30; i++) 
 		board += '<div id="card_'+ i +'" class="card"  onclick="revealCard(this,\'' + Game.chars[i] + '\')"></div>';
 	document.getElementById('board').innerHTML = board;
-	console.log('cheat:\n', Game.chars.join('').match(new RegExp('.{1,' + 6 + '}', 'g')));
+	console.log('Cheat:\n', Game.chars.join('').match(new RegExp('.{1,' + 6 + '}', 'g')));
 }
 
 function shuffleCards() {
@@ -36,9 +36,9 @@ function revealCard(card, char) {
 			Game.cardIds.push(card.id);
 		}
 		if (Game.selectedCards[0] && Game.selectedCards[1])
-			Game.selectedCards[0] == Game.selectedCards[1] ? (Game.tilesFlipped += 2, [Game.selectedCards, Game.cardIds] = [[],[]]) : setTimeout(revertCards, 500);
+			Game.selectedCards[0] == Game.selectedCards[1] ? (Game.score += 2, [Game.selectedCards, Game.cardIds] = [[],[]]) : setTimeout(revertCards, 500);
 
-		if (Game.tilesFlipped == Game.chars.length) newGame();
+		if (Game.score == Game.chars.length) newGame();
 	}
 }
 
