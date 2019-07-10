@@ -8,47 +8,43 @@ var Game = {
 function newGame() {
 	var board = '';
 
-	Game.tilesFlipped = 0;	
-	shuffle();
+	Game.tilesFlipped = 0;
+	alert("Starting new game...");
+	document.getElementById('board').innerHTML = "";
+	shuffleCards();
 
-	for (var i = 0; i < 30; i++) {
-		board += '<div id="tile_'+ i +'" class="card"  onclick="revealCard(this,\'' + Game.chars[i] + '\')"></div>';
-		document.getElementById('board').innerHTML = board;
-	}
+	for (var i = 0; i < 30; i++) 
+		board += '<div id="card_'+ i +'" class="card"  onclick="revealCard(this,\'' + Game.chars[i] + '\')"></div>';
+	document.getElementById('board').innerHTML = board;
 	console.log('cheat:\n', Game.chars.join('').match(new RegExp('.{1,' + 6 + '}', 'g')));
 }
 
-function shuffle() {
+function shuffleCards() {
 	for (let i = 0; i < 30; i++) {
         var random = Math.floor(Math.random() * (i + 1));
 		[Game.chars[i], Game.chars[random]] = [Game.chars[random], [Game.chars[i]]];
 	}
 }
 
-function revealCard(tile, char) {
-	if (tile.innerHTML == "" && Game.selectedCards.length < 2) {
-		tile.style.background = 'transparent';
-		tile.innerHTML = char;
+function revealCard(card, char) {
+	if (card.innerHTML == "" && Game.selectedCards.length < 2) {
+		card.style.background = 'transparent';
+		card.innerHTML = char;
 
 		if (!Game.selectedCards[0] || !Game.selectedCards[1]) {
 			Game.selectedCards.push(char);
-			Game.cardIds.push(tile.id);
+			Game.cardIds.push(card.id);
 		}
-
 		if (Game.selectedCards[0] && Game.selectedCards[1])
 			Game.selectedCards[0] == Game.selectedCards[1] ? (Game.tilesFlipped += 2, [Game.selectedCards, Game.cardIds] = [[],[]]) : setTimeout(revertCards, 500);
 
-		if (Game.tilesFlipped == Game.chars.length) {
-			alert("Starting new game...");
-			document.getElementById('board').innerHTML = "";
-			newGame();
-		}
+		if (Game.tilesFlipped == Game.chars.length) newGame();
 	}
 }
 
 function revertCards() {
-    var tile_1 = document.getElementById(Game.cardIds[0]);
-    var tile_2 = document.getElementById(Game.cardIds[1]);
-    tile_1.innerHTML = tile_2.innerHTML = "";
+    var card_1 = document.getElementById(Game.cardIds[0]);
+    var card_2 = document.getElementById(Game.cardIds[1]);
+    card_1.innerHTML = card_2.innerHTML = "";
     [Game.selectedCards, Game.cardIds] = [[],[]];
 }
